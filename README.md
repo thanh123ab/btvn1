@@ -1,3 +1,7 @@
+-- tác giả: CAO ĐỨC THÀNH 
+
+-- mô tả: SP này làm về xử lý bán hàng của cừa hàng tạp hóa gia đình
+
 # Thông Tin Sinh Viên
 
 Mã SV : K215480106124
