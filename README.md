@@ -19,8 +19,9 @@ Bài toán quản lý tạp hóa gia đình nhằm đảm bảo quản lý hiệ
 
 Quản lý thông tin nhà cung cấp : thêm , xóa , sửa thông tin, xem thông tin nhà cung cấp
 
-quản lý thông tin xuất nhập hàng: Thêm,  hàng nhập vào, kiểm tra hàng (HSD), hóa đơn bán hàng và quản lý nguồn hàng còn trong cửa hàng 
+quản lý thông tin xuất nhập hàng: Thêm,  hàng nhập vào, kiểm tra hàng (HSD), hóa đơn bán hàng
 
+sử dụng trigger để quản lý nguồn hàng còn trong cửa hàng
 
 
 # tạo cơ sở dữ liệu gồm các bảng
