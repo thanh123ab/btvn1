@@ -234,7 +234,11 @@ EXEC CapNhatNCC @MANCC = 'NC03', @TENNCC = N'Nhà Cung Cap C - Updated', @DCHI =
 EXEC XemNCC;
 ```
 hình ảnh sau khi thêm ncc :![image](https://github.com/thanh123ab/btvn1/assets/168660300/6334cbd3-1fc4-46a1-aecb-e6448f33895a)
+
+
 sửa :![image](https://github.com/thanh123ab/btvn1/assets/168660300/826a99b2-1700-456d-b63f-5e0f30750461)
+
+
 xóa:![image](https://github.com/thanh123ab/btvn1/assets/168660300/89924f5e-c615-4dca-a1e3-65fdc875316b)
 
 
