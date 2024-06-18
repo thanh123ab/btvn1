@@ -1,4 +1,4 @@
-![image](https://github.com/thanh123ab/btvn1/assets/168660300/1cc88aec-71ef-4c7e-bde1-84440c8977af)# Thông Tin Sinh Viên
+# Thông Tin Sinh Viên
 
 Mã SV : K215480106124
 
