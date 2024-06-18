@@ -225,14 +225,18 @@ SELECT * FROM NCC;
 kiểm tra với các thủ tục
 ```
 -- thêm ncc
-EXEC themNCC @MANCC = 'NC04', @TENNCC = N'Nhà Cung Cấp D', @DCHI = N'123 Nguyễn Trãi', @SODT = '0398765432';
+EXEC themNCC @MANCC = 'NC04', @TENNCC = N'Nhà Cung Cap D', @DCHI = N'123 Nguyen Trai', @SODT = '0398765432';
 -- xóa ncc
 EXEC XoaNCC @MANCC = 'NC04';
 --sửa thông tin ncc
-EXEC CapNhatNCC @MANCC = 'NC03', @TENNCC = N'Nhà Cung Cấp C - Updated', @DCHI = N'789 Trần Phú - Updated', @SODT = '0367891234';
+EXEC CapNhatNCC @MANCC = 'NC03', @TENNCC = N'Nhà Cung Cap C - Updated', @DCHI = N'789 Tran Phu - Updated', @SODT = '0367891234';
 -- xem thông tin nhà cc
 EXEC XemNCC;
 ```
+hình ảnh sau khi thêm ncc :![image](https://github.com/thanh123ab/btvn1/assets/168660300/6334cbd3-1fc4-46a1-aecb-e6448f33895a)
+sửa :![image](https://github.com/thanh123ab/btvn1/assets/168660300/826a99b2-1700-456d-b63f-5e0f30750461)
+xóa:![image](https://github.com/thanh123ab/btvn1/assets/168660300/89924f5e-c615-4dca-a1e3-65fdc875316b)
+
 
 quản lý thông tin xuất nhập hàng: Thêm,  hàng nhập vào, kiểm tra hàng (HSD), hóa đơn bán hàng
 ```
