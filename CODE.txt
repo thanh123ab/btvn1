@@ -1,0 +1,282 @@
+-- Tạo cơ sở dữ liệu QuanLy
+CREATE DATABASE QuanLy;
+GO
+
+-- Sử dụng cơ sở dữ liệu QuanLy
+USE QuanLy;
+GO
+
+-- Tạo bảng KHACHHANG
+CREATE TABLE KHACHHANG
+(
+    MAKH CHAR(4) PRIMARY KEY,
+    HOTEN VARCHAR(40),
+    DCHI VARCHAR(50),
+    SODT VARCHAR(20),
+    NGSINH SMALLDATETIME,
+    NGDK SMALLDATETIME,
+    DOANHSO MONEY
+);
+
+-- Tạo bảng NHANVIEN
+CREATE TABLE NHANVIEN
+(
+    MANV CHAR(4) PRIMARY KEY,
+    HOTEN VARCHAR(40),
+    SODT VARCHAR(20),
+    NGAYSINH NVARCHAR(20)
+);
+
+-- Tạo bảng SANPHAM
+CREATE TABLE SANPHAM
+(
+    MASP CHAR(4) PRIMARY KEY,
+    TENSP VARCHAR(40),
+    DVT VARCHAR(20),
+    NUOCSX VARCHAR(40),
+    HSD DATETIME,
+    GIA MONEY
+);
+
+-- Tạo bảng HOADON
+CREATE TABLE HOADON
+(
+    SOHD INT PRIMARY KEY,
+    NGHD SMALLDATETIME,
+    MAKH CHAR(4),
+    MANV CHAR(4),
+    TRIGIA MONEY,
+    FOREIGN KEY (MAKH) REFERENCES KHACHHANG(MAKH),
+    FOREIGN KEY (MANV) REFERENCES NHANVIEN(MANV)
+);
+
+-- Tạo bảng CTHD (Chi tiết hóa đơn)
+CREATE TABLE CTHD
+(
+    SOHD INT,
+    MASP CHAR(4),
+    SL INT,
+    PRIMARY KEY (SOHD, MASP),
+    FOREIGN KEY (SOHD) REFERENCES HOADON(SOHD),
+    FOREIGN KEY (MASP) REFERENCES SANPHAM(MASP)
+);
+
+-- Tạo bảng NCC (Nhà cung cấp)
+CREATE TABLE NCC
+(
+    MANCC CHAR(4) PRIMARY KEY,
+    TENNCC VARCHAR(40),
+    DCHI VARCHAR(50),
+    SODT VARCHAR(20)
+);
+
+-- Tạo bảng TonKho (Bảng theo dõi hàng tồn kho)
+CREATE TABLE TonKho
+(
+    MASP CHAR(4) PRIMARY KEY,
+    SoLuong INT
+);
+
+-- Tạo bảng DoanhThu
+CREATE TABLE DoanhThu
+(
+    NgayDoanhThu DATE PRIMARY KEY,
+    TongDoanhThu MONEY
+);
+
+-- Nhập thông tin khách hàng
+INSERT INTO KHACHHANG (MAKH, HOTEN, DCHI, SODT, NGSINH, NGDK, DOANHSO)
+VALUES
+('KH01', 'Nguyen Van A', '123 Le Loi', '0123456789', '1980-01-01', '2023-01-01', 1000000),
+('KH02', 'Tran Thi B', '456 Nguyen Hue', '0987654321', '1990-02-01', '2023-02-01', 2000000),
+('KH03', 'Le Van C', '789 Tran Hung Dao', '0234567890', '1975-03-01', '2023-03-01', 1500000);
+
+-- Nhập thông tin nhân viên
+INSERT INTO NHANVIEN (MANV, HOTEN, SODT, NGAYSINH)
+VALUES
+('NV01', 'Nguyen Van X', '0987654321', '1990-01-01'),
+('NV02', 'Tran Thi Y', '0987654321', '1995-02-01'),
+('NV03', 'Le Van Z', '0987654321', '1992-03-01');
+
+-- Nhập giá trị cho sản phẩm
+INSERT INTO SANPHAM (MASP, TENSP, DVT, NUOCSX, GIA)
+VALUES
+('SP01', 'Sua Tuoi', 'Hop', 'Vietnam', 15000),
+('SP02', 'Banh Mi', 'Chiec', 'Vietnam', 5000),
+('SP03', 'Nuoc Ngot', 'Chai', 'Vietnam', 10000),
+('SP04', 'Bot Giat', 'Tui', 'Vietnam', 5000),
+('SP05', 'Dau An', 'Chai', 'Vietnam', 5000);
+
+-- Nhập giá trị hóa đơn
+INSERT INTO HOADON (SOHD, NGHD, MAKH, MANV, TRIGIA)
+VALUES
+(1, '2024-06-18', 'KH01', 'NV01', 30000),
+(2, '2024-06-19', 'KH02', 'NV02', 20000),
+(3, '2024-06-20', 'KH03', 'NV03', 15000);
+
+-- Nhập giá trị cho chi tiết hóa đơn (CTHD)
+INSERT INTO CTHD (SOHD, MASP, SL)
+VALUES
+(1, 'SP01', 2),
+(1, 'SP02', 1),
+(2, 'SP02', 2),
+(2, 'SP03', 1),
+(3, 'SP01', 1),
+(3, 'SP03', 1);
+
+-- Nhập giá trị cho Nhà cung cấp
+INSERT INTO NCC (MANCC, TENNCC, DCHI, SODT)
+VALUES
+('NC01', 'Nha Cung Cap A', '123 Phan Chu Trinh', '0321456789'),
+('NC02', 'Nha Cung Cap B', '456 Le Thanh Ton', '0345678910'),
+('NC03', 'Nha Cung Cap C', '789 Tran Phu', '0367891234');
+-- Nhập giá trị hàng tồn kho
+INSERT INTO TonKho (MaSP, SoLuong)
+VALUES
+('SP01', 100),
+('SP02', 200),
+('SP03', 150),
+('SP04', 80),
+('SP05', 120),
+('SP06', 50);
+GO 
+-- Quản lý thông tin nhà cung cấp
+-- Thêm nhà cung cấp mới
+CREATE PROCEDURE themNCC
+    @MANCC CHAR(4),
+    @TENNCC NVARCHAR(40),
+    @DCHI NVARCHAR(50),
+    @SODT VARCHAR(20)
+AS
+BEGIN
+    INSERT INTO NCC (MANCC, TENNCC, DCHI, SODT)
+    VALUES (@MANCC, @TENNCC, @DCHI, @SODT);
+END;
+GO
+
+-- Xóa nhà cung cấp
+CREATE PROCEDURE XoaNCC
+    @MANCC CHAR(4)
+AS
+BEGIN
+    DELETE FROM NCC
+    WHERE MANCC = @MANCC;
+END;
+GO
+
+
+-- Sửa thông tin nhà cung cấp
+CREATE PROCEDURE CapNhatNCC
+    @MANCC CHAR(4),
+    @TENNCC NVARCHAR(40),
+    @DCHI NVARCHAR(50),
+    @SODT VARCHAR(20)
+AS
+BEGIN
+    UPDATE NCC
+    SET TENNCC = @TENNCC, DCHI = @DCHI, SODT = @SODT
+    WHERE MANCC = @MANCC;
+END;
+GO
+
+-- Xem thông tin nhà cung cấp
+SELECT * FROM NCC;
+--------------------------------------------------------
+-- thêm ncc
+EXEC themNCC @MANCC = 'NC04', @TENNCC = N'Nhà Cung Cap D', @DCHI = N'123 Nguyen Trai', @SODT = '0398765432';
+-- xóa ncc
+EXEC XoaNCC @MANCC = 'NC04';
+--sửa thông tin ncc
+EXEC CapNhatNCC @MANCC = 'NC03', @TENNCC = N'Nhà Cung Cap C - Updated', @DCHI = N'789 Tran Phu - Updated', @SODT = '0367891234';
+-- xem thông tin nhà cc
+EXEC XemNCC;
+
+
+
+-- Quản lý thông tin xuất nhập hàng
+-- Thêm sản phẩm nhập vào
+CREATE PROCEDURE themSANPHAM
+    @MASP CHAR(4),
+    @TENSP VARCHAR(40),
+    @DVT VARCHAR(20),
+    @NUOCSX VARCHAR(40),
+    @HSD DATETIME,
+    @GIA MONEY
+AS
+BEGIN
+    INSERT INTO SANPHAM(MASP,TENSP, DVT, NUOCSX, HSD, GIA)
+    VALUES (@MASP, @TENSP, @DVT, @NUOCSX,@HSD, @GIA);
+END;
+GO
+
+-- Kiểm tra hàng hóa hết hạn sử dụng (HSD)
+SELECT * FROM SANPHAM WHERE HSD < GETDATE();
+
+-- Tạo hóa đơn bán hàng mới
+CREATE PROCEDURE ThemHoaDonBanmoi
+    @SOHD INT,
+    @NGHD SMALLDATETIME,
+    @MAKH CHAR(4),
+    @MANV CHAR(4),
+    @TRIGIA MONEY
+AS
+BEGIN
+   INSERT INTO HOADON(SOHD, NGHD, MAKH,MANV, TRIGIA) 
+    VALUES (@SOHD, @NGHD, @MAKH, @MANV, @TRIGIA)
+END;
+GO
+-- Thêm hóa đơn mới
+EXEC ThemHoaDonBanmoi @SOHD = 4, @NGHD = '2024-06-21', @MAKH = 'KH01', @MANV = 'NV01', @TRIGIA = 35000;
+
+
+-- Trigger cập nhật hàng tồn kho sau khi thêm chi tiết hóa đơn
+CREATE TRIGGER tr_UpdateTonKho
+ON CTHD
+AFTER INSERT
+AS
+BEGIN
+UPDATE TonKho
+SET SoLuong = SoLuong - (SELECT SL FROM inserted WHERE TonKho.MaSP = inserted.MASP)
+FROM TonKho
+INNER JOIN inserted ON TonKho.MaSP = inserted.MASP;
+END;
+GO -- Kết thúc batch chứa trigger
+-- Trigger cập nhật doanh thu khi tạo hóa đơn mới
+-- Trigger cập nhật doanh thu sau khi thêm hóa đơn mới
+CREATE TRIGGER tr_CapNhatDoanhThu
+ON HOADON
+AFTER INSERT
+AS
+BEGIN
+    -- Lấy ngày của hóa đơn mới
+    DECLARE @NgayHoaDon DATE = (SELECT CAST(NGHD AS DATE) FROM inserted);
+    
+    -- Kiểm tra xem ngày đó đã có trong bảng DoanhThu chưa
+    IF NOT EXISTS (SELECT 1 FROM DoanhThu WHERE NgayDoanhThu = @NgayHoaDon)
+    BEGIN
+        -- Nếu chưa có, thêm mới vào bảng DoanhThu
+        INSERT INTO DoanhThu (NgayDoanhThu, TongDoanhThu)
+        VALUES (@NgayHoaDon, 0);
+    END
+
+    -- Cập nhật doanh thu cho ngày đó
+    UPDATE DoanhThu
+    SET TongDoanhThu = TongDoanhThu + (SELECT TRIGIA FROM inserted)
+    WHERE NgayDoanhThu = @NgayHoaDon;
+END;
+GO
+-- Thêm hóa đơn mới
+INSERT INTO HOADON (SOHD, NGHD, MAKH, MANV, TRIGIA)
+VALUES (6, '2024-06-23', 'KH01', 'NV02', 50000);
+
+-- Thêm chi tiết hóa đơn
+INSERT INTO CTHD (SOHD, MASP, SL)
+VALUES (6, 'SP01', 5), (6, 'SP02', 3);
+
+-- Kiểm tra trigger hoạt động: Xem doanh thu theo ngày
+SELECT NgayDoanhThu, TongDoanhThu FROM DoanhThu;
+
+-- Kiểm tra tổng doanh thu trong khoảng thời gian nhất định
+SELECT SUM(TongDoanhThu) AS TongDoanhThu
+FROM DoanhThu
+WHERE NgayDoanhThu BETWEEN '2024-06-01' AND '2024-06-30';
